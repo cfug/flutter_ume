@@ -1,0 +1,26 @@
+# Exclude large files that shouldn't be published
+plugins.zip
+*.zip
+
+# Exclude cyclop docs (web build artifacts)
+kits/flutter_ume_kit_ui/lib/third_party/cyclop/docs/
+kits/flutter_ume_kit_ui/lib/third_party/cyclop/tools/
+
+# Exclude coverage files
+coverage/
+**/coverage/
+coverage_badge.svg
+**/coverage_badge.svg
+
+# Exclude screenshots and large images
+screenshots/
+**/screenshots/
+apk_qrcode.png
+ume_banner.png
+
+# Exclude example and test files from kits
+**/example/
+**/test/
+
+# Exclude analysis options from sub-packages
+kits/**/analysis_options.yaml
