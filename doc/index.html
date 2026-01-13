@@ -348,9 +348,11 @@
   <span class="key">flutter_ume_plus:</span> <span class="value">^4.3.0</span>
   <span class="key">flutter_ume_kit_ui_plus:</span> <span class="value">^4.3.0</span>
   <span class="key">flutter_ume_kit_device_plus:</span> <span class="value">^4.3.0</span>
-  <span class="key">flutter_ume_kit_perf_plus:</span> <span class="value">^4.3.0</span>
-  <span class="key">flutter_ume_kit_console_plus:</span> <span class="value">^4.4.0</span>
-  <span class="key">flutter_ume_kit_dio_plus:</span> <span class="value">^4.4.0</span></pre>
+  <span class="key">flutter_ume_kit_perf_plus:</span> <span class="value">^5.0.0</span>
+  <span class="key">flutter_ume_kit_console_plus:</span> <span class="value">^5.0.0</span>
+  <span class="key">flutter_ume_kit_dio_plus:</span> <span class="value">^5.0.0</span>
+  <span class="key">flutter_ume_kit_shared_preferences_plus:</span> <span class="value">^5.0.0</span>
+  <span class="key">flutter_ume_kit_provider_plus:</span> <span class="value">^5.0.0</span></pre>
             </div>
         </div>
     </section>
@@ -365,7 +367,7 @@
                     <div class="kit-header">
                         <div class="kit-icon">🎨</div>
                         <span class="kit-name">UI 工具包</span>
-                        <span class="kit-version">4.3.0</span>
+                        <span class="kit-version">5.0.0</span>
                     </div>
                     <p class="kit-desc">全面的 UI 检查和调试工具，用于分析 Flutter Widget。</p>
                     <ul class="kit-features">
@@ -381,7 +383,7 @@
                     <div class="kit-header">
                         <div class="kit-icon">📝</div>
                         <span class="kit-name">控制台</span>
-                        <span class="kit-version">4.4.0</span>
+                        <span class="kit-version">5.0.0</span>
                     </div>
                     <p class="kit-desc">高级控制台，支持多种 UI 样式查看 debugPrint 日志。</p>
                     <ul class="kit-features">
@@ -397,7 +399,7 @@
                     <div class="kit-header">
                         <div class="kit-icon">🌐</div>
                         <span class="kit-name">Dio 网络</span>
-                        <span class="kit-version">4.4.0</span>
+                        <span class="kit-version">5.0.0</span>
                     </div>
                     <p class="kit-desc">Dio HTTP 客户端的网络请求检查器。</p>
                     <ul class="kit-features">
@@ -413,7 +415,7 @@
                     <div class="kit-header">
                         <div class="kit-icon">📱</div>
                         <span class="kit-name">设备信息</span>
-                        <span class="kit-version">4.3.0</span>
+                        <span class="kit-version">5.0.0</span>
                     </div>
                     <p class="kit-desc">设备信息和系统详情，用于调试平台相关问题。</p>
                     <ul class="kit-features">
@@ -428,7 +430,7 @@
                     <div class="kit-header">
                         <div class="kit-icon">⚡</div>
                         <span class="kit-name">性能监控</span>
-                        <span class="kit-version">4.3.0</span>
+                        <span class="kit-version">5.0.0</span>
                     </div>
                     <p class="kit-desc">性能监控工具，用于追踪内存使用和帧率。</p>
                     <ul class="kit-features">
@@ -443,7 +445,7 @@
                     <div class="kit-header">
                         <div class="kit-icon">💻</div>
                         <span class="kit-name">代码查看</span>
-                        <span class="kit-version">4.3.0</span>
+                        <span class="kit-version">5.0.0</span>
                     </div>
                     <p class="kit-desc">在运行中的应用内直接查看 Widget 源代码。</p>
                     <ul class="kit-features">
@@ -452,6 +454,38 @@
                         <li>代码导航 & 分享</li>
                     </ul>
                     <a href="https://pub.dev/packages/flutter_ume_kit_show_code_plus" class="kit-link">查看详情 →</a>
+                </div>
+
+                <div class="kit-card">
+                    <div class="kit-header">
+                        <div class="kit-icon">💾</div>
+                        <span class="kit-name">SharedPreferences</span>
+                        <span class="kit-version">5.0.0</span>
+                    </div>
+                    <p class="kit-desc">SharedPreferences 数据查看器和编辑器。</p>
+                    <ul class="kit-features">
+                        <li>查看所有 SharedPreferences 数据</li>
+                        <li>编辑和删除数据</li>
+                        <li>搜索和过滤功能</li>
+                        <li>支持多种数据类型</li>
+                    </ul>
+                    <a href="https://pub.dev/packages/flutter_ume_kit_shared_preferences_plus" class="kit-link">查看详情 →</a>
+                </div>
+
+                <div class="kit-card">
+                    <div class="kit-header">
+                        <div class="kit-icon">🔄</div>
+                        <span class="kit-name">Provider 状态</span>
+                        <span class="kit-version">5.0.0</span>
+                    </div>
+                    <p class="kit-desc">Provider 状态查看器，用于检查和监控 Provider 状态。</p>
+                    <ul class="kit-features">
+                        <li>查看所有 Provider 状态</li>
+                        <li>实时状态监控</li>
+                        <li>状态变化追踪</li>
+                        <li>状态树可视化</li>
+                    </ul>
+                    <a href="https://pub.dev/packages/flutter_ume_kit_provider_plus" class="kit-link">查看详情 →</a>
                 </div>
             </div>
         </div>
@@ -477,13 +511,17 @@
 <pre>import 'package:flutter_ume_plus/flutter_ume_plus.dart';
 import 'package:flutter_ume_kit_ui_plus/flutter_ume_kit_ui_plus.dart';
 import 'package:flutter_ume_kit_console_plus/flutter_ume_kit_console_plus.dart';
+import 'package:flutter_ume_kit_shared_preferences_plus/flutter_ume_kit_shared_preferences_plus.dart';
+import 'package:flutter_ume_kit_provider_plus/flutter_ume_kit_provider_plus.dart';
 
 void main() {
   if (kDebugMode) {
     PluginManager.instance
       ..register(WidgetInfoInspector())
       ..register(WidgetDetailInspector())
-      ..register(Console());
+      ..register(Console())
+      ..register(SharedPreferencesInspector())
+      ..register(ProviderInspector());
     runApp(UMEWidget(child: MyApp(), enable: true));
   } else {
     runApp(MyApp());
