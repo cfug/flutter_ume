@@ -2,6 +2,15 @@
 
 [English](./CHANGELOG.md)
 
+## [5.1.0]
+
+* 新增可自定义浮动按钮大小的 `floatingButtonSize` 参数
+* 改进 UMEWidget API，使用更语义化的参数命名
+
+## [5.0.1]
+
+* 更新依赖版本
+
 ## [1.1.1+1]
 
 * 更新依赖版本

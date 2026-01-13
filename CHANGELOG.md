@@ -2,6 +2,11 @@
 
 [简体中文](./CHANGELOG_cn.md)
 
+# 5.1.0
+
+- Add customizable floating button size with `floatingButtonSize` parameter
+- Improve UMEWidget API with better semantic naming
+
 # 5.0.1
 
 - 更新依赖版本

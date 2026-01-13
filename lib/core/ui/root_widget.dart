@@ -16,12 +16,14 @@ class UMEWidget extends StatefulWidget {
     this.enable = true,
     this.supportedLocales,
     this.localizationsDelegates = defaultLocalizationsDelegates,
+    this.floatingButtonSize = const Size(65.0, 65.0),
   });
 
   final Widget child;
   final bool enable;
   final Iterable<Locale>? supportedLocales;
   final Iterable<LocalizationsDelegate> localizationsDelegates;
+  final Size floatingButtonSize;
 
   /// Close the activated plugin if any.
   ///
@@ -181,6 +183,7 @@ class _UMEWidgetState extends State<UMEWidget> {
             type: MaterialType.transparency,
             child: _ContentPage(
               key: _contentPageKey,
+              floatingButtonSize: widget.floatingButtonSize,
               refreshChildLayout: () {
                 _replaceChild();
                 setState(() {});
@@ -199,9 +202,11 @@ class _UMEWidgetState extends State<UMEWidget> {
 }
 
 class _ContentPage extends StatefulWidget {
-  const _ContentPage({super.key, this.refreshChildLayout});
+  const _ContentPage(
+      {super.key, this.refreshChildLayout, required this.floatingButtonSize});
 
   final VoidCallback? refreshChildLayout;
+  final Size floatingButtonSize;
 
   @override
   _ContentPageState createState() => _ContentPageState();
@@ -220,19 +225,19 @@ class _ContentPageState extends State<_ContentPage> {
   bool _minimalContent = true;
 
   void dragEvent(DragUpdateDetails details) {
-    _dx = details.globalPosition.dx - dotSize.width / 2;
-    _dy = details.globalPosition.dy - dotSize.height / 2;
+    _dx = details.globalPosition.dx - widget.floatingButtonSize.width / 2;
+    _dy = details.globalPosition.dy - widget.floatingButtonSize.height / 2;
     setState(() {});
   }
 
   void dragEnd(DragEndDetails details) {
-    if (_dx + dotSize.width / 2 < _windowSize.width / 2) {
+    if (_dx + widget.floatingButtonSize.width / 2 < _windowSize.width / 2) {
       _dx = margin;
     } else {
-      _dx = _windowSize.width - dotSize.width - margin;
+      _dx = _windowSize.width - widget.floatingButtonSize.width - margin;
     }
-    if (_dy + dotSize.height > _windowSize.height) {
-      _dy = _windowSize.height - dotSize.height - margin;
+    if (_dy + widget.floatingButtonSize.height > _windowSize.height) {
+      _dy = _windowSize.height - widget.floatingButtonSize.height - margin;
     } else if (_dy < 0) {
       _dy = margin;
     }
@@ -368,8 +373,8 @@ class _ContentPageState extends State<_ContentPage> {
         }
         final x = double.parse(value.split(',').first);
         final y = double.parse(value.split(',').last);
-        if (mq.size.height - dotSize.height < y ||
-            mq.size.width - dotSize.width < x) {
+        if (mq.size.height - widget.floatingButtonSize.height < y ||
+            mq.size.width - widget.floatingButtonSize.width < x) {
           return;
         }
         _dx = x;
@@ -382,8 +387,9 @@ class _ContentPageState extends State<_ContentPage> {
         _minimalContent = value ?? true;
       });
     });
-    _dx = _windowSize.width - dotSize.width - margin * 4;
-    _dy = _windowSize.height - dotSize.height - bottomDistance;
+    _dx = _windowSize.width - widget.floatingButtonSize.width - margin * 4;
+    _dy =
+        _windowSize.height - widget.floatingButtonSize.height - bottomDistance;
     _currentWidget = _empty;
   }
 
@@ -415,9 +421,12 @@ class _ContentPageState extends State<_ContentPage> {
   Widget build(BuildContext context) {
     _context = context;
     if (_windowSize.isEmpty) {
-      _dx = MediaQuery.of(context).size.width - dotSize.width - margin * 4;
-      _dy =
-          MediaQuery.of(context).size.height - dotSize.height - bottomDistance;
+      _dx = MediaQuery.of(context).size.width -
+          widget.floatingButtonSize.width -
+          margin * 4;
+      _dy = MediaQuery.of(context).size.height -
+          widget.floatingButtonSize.height -
+          bottomDistance;
       _windowSize = MediaQuery.of(context).size;
     }
     return SizedBox(
@@ -436,8 +445,10 @@ class _ContentPageState extends State<_ContentPage> {
                 behavior: HitTestBehavior.opaque,
                 onTapUp: (_) => onTap(),
                 onPanUpdate: (details) {
-                  _dx = details.globalPosition.dx - dotSize.width / 2;
-                  _dy = details.globalPosition.dy - dotSize.height / 2;
+                  _dx = details.globalPosition.dx -
+                      widget.floatingButtonSize.width / 2;
+                  _dy = details.globalPosition.dy -
+                      widget.floatingButtonSize.height / 2;
                   setState(() {});
                 },
                 onPanEnd: (_) => dragEnd(DragEndDetails()),
@@ -452,8 +463,8 @@ class _ContentPageState extends State<_ContentPage> {
                             blurRadius: 2.0,
                             spreadRadius: 1.0)
                       ]),
-                  width: dotSize.width,
-                  height: dotSize.height,
+                  width: widget.floatingButtonSize.width,
+                  height: widget.floatingButtonSize.height,
                   child: Stack(
                     children: [
                       Center(
