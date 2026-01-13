@@ -12,7 +12,7 @@ class FloatingWidget extends StatefulWidget {
       this.contentWidget,
       this.closeAction,
       this.toolbarActions,
-      this.minimalHeight = 130, //稍微增加一点高度给圆角留空间
+      this.minimalHeight = 260, //稍微增加一点高度给圆角留空间
       this.onFullScreenChanged});
 
   final Widget? contentWidget;

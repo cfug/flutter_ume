@@ -216,11 +216,8 @@ class _ContentPageState extends State<_ContentPage> {
   Pluggable? _currentSelected;
   final Widget _empty = Container();
   Widget? _currentWidget;
-  Widget? _menuPage;
   BuildContext? _context;
-
   bool _minimalContent = true;
-  Widget? _toolbarWidget;
 
   void dragEvent(DragUpdateDetails details) {
     _dx = details.globalPosition.dx - dotSize.width / 2;
@@ -260,19 +257,55 @@ class _ContentPageState extends State<_ContentPage> {
       widget.refreshChildLayout!();
     }
     _currentSelected = null;
-    _currentWidget = _empty;
+
     if (_minimalContent) {
-      _currentWidget = _toolbarWidget;
       _showedMenu = true;
+      _currentWidget = _buildToolbarWidget();
+    } else {
+      _showedMenu = false;
+      _currentWidget = _empty;
     }
     setState(() {});
   }
 
   void _updatePanelWidget() {
     setState(() {
-      _currentWidget =
-          _showedMenu ? (_minimalContent ? _toolbarWidget : _menuPage) : _empty;
+      _currentWidget = _showedMenu
+          ? (_minimalContent ? _buildToolbarWidget() : _buildMenuPage())
+          : _empty;
     });
+  }
+
+  Widget _buildToolbarWidget() {
+    return ToolBarWidget(
+      key: UniqueKey(),
+      action: _itemTapAction,
+      maximalAction: () {
+        _minimalContent = false;
+        _updatePanelWidget();
+        PluginStoreManager().storeMinimalToolbarSwitch(false);
+      },
+      closeAction: () {
+        _showedMenu = false;
+        _updatePanelWidget();
+      },
+    );
+  }
+
+  Widget _buildMenuPage() {
+    return MenuPage(
+      key: UniqueKey(),
+      action: _itemTapAction,
+      minimalAction: () {
+        _minimalContent = true;
+        _updatePanelWidget();
+        PluginStoreManager().storeMinimalToolbarSwitch(true);
+      },
+      closeAction: () {
+        _showedMenu = false;
+        _updatePanelWidget();
+      },
+    );
   }
 
   void _handleAction(BuildContext? context, Pluggable data) {
@@ -325,8 +358,8 @@ class _ContentPageState extends State<_ContentPage> {
 
   @override
   void initState() {
-    final ctx = context;
     super.initState();
+    final ctx = context;
     _storeManager.fetchFloatingDotPos().then((value) {
       if (ctx.mounted) {
         final mq = MediaQuery.of(ctx);
@@ -351,55 +384,31 @@ class _ContentPageState extends State<_ContentPage> {
     });
     _dx = _windowSize.width - dotSize.width - margin * 4;
     _dy = _windowSize.height - dotSize.height - bottomDistance;
-    itemTapAction(pluginData) async {
-      if (pluginData is PluggableWithAnywhereDoor) {
-        dynamic result;
-        if (pluginData.routeNameAndArgs != null) {
-          result = await pluginData.navigator?.pushNamed(
-              pluginData.routeNameAndArgs!.item1,
-              arguments: pluginData.routeNameAndArgs!.item2);
-        } else if (pluginData.route != null) {
-          result = await pluginData.navigator?.push(pluginData.route!);
-        }
-        pluginData.popResultReceive(result);
-      } else {
-        _currentSelected = pluginData;
-        if (_currentSelected != null) {
-          PluginManager.instance.activatePluggable(_currentSelected!);
-        }
-        _handleAction(_context, pluginData!);
-        if (widget.refreshChildLayout != null) {
-          widget.refreshChildLayout!();
-        }
-        pluginData.onTrigger();
-      }
-    }
-
-    _menuPage = MenuPage(
-      action: itemTapAction,
-      minimalAction: () {
-        _minimalContent = true;
-        _updatePanelWidget();
-        PluginStoreManager().storeMinimalToolbarSwitch(true);
-      },
-      closeAction: () {
-        _showedMenu = false;
-        _updatePanelWidget();
-      },
-    );
-    _toolbarWidget = ToolBarWidget(
-      action: itemTapAction,
-      maximalAction: () {
-        _minimalContent = false;
-        _updatePanelWidget();
-        PluginStoreManager().storeMinimalToolbarSwitch(false);
-      },
-      closeAction: () {
-        _showedMenu = false;
-        _updatePanelWidget();
-      },
-    );
     _currentWidget = _empty;
+  }
+
+  Future<void> _itemTapAction(dynamic pluginData) async {
+    if (pluginData is PluggableWithAnywhereDoor) {
+      dynamic result;
+      if (pluginData.routeNameAndArgs != null) {
+        result = await pluginData.navigator?.pushNamed(
+            pluginData.routeNameAndArgs!.item1,
+            arguments: pluginData.routeNameAndArgs!.item2);
+      } else if (pluginData.route != null) {
+        result = await pluginData.navigator?.push(pluginData.route!);
+      }
+      pluginData.popResultReceive(result);
+    } else {
+      _currentSelected = pluginData;
+      if (_currentSelected != null) {
+        PluginManager.instance.activatePluggable(_currentSelected!);
+      }
+      _handleAction(_context, pluginData!);
+      if (widget.refreshChildLayout != null) {
+        widget.refreshChildLayout!();
+      }
+      pluginData.onTrigger();
+    }
   }
 
   @override
@@ -417,18 +426,21 @@ class _ContentPageState extends State<_ContentPage> {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          _currentWidget!,
+          _currentWidget ?? _empty,
           Positioned(
             left: _dx,
             top: _dy,
             child: Tooltip(
               message: 'Open ume panel',
               child: GestureDetector(
-                onTap: onTap,
-                onVerticalDragEnd: dragEnd,
-                onHorizontalDragEnd: dragEnd,
-                onHorizontalDragUpdate: dragEvent,
-                onVerticalDragUpdate: dragEvent,
+                behavior: HitTestBehavior.opaque,
+                onTapUp: (_) => onTap(),
+                onPanUpdate: (details) {
+                  _dx = details.globalPosition.dx - dotSize.width / 2;
+                  _dy = details.globalPosition.dy - dotSize.height / 2;
+                  setState(() {});
+                },
+                onPanEnd: (_) => dragEnd(DragEndDetails()),
                 child: Container(
                   decoration: const BoxDecoration(
                       shape: BoxShape.circle,

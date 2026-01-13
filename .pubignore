@@ -6,6 +6,11 @@ plugins.zip
 kits/flutter_ume_kit_ui/lib/third_party/cyclop/docs/
 kits/flutter_ume_kit_ui/lib/third_party/cyclop/tools/
 
+# Exclude specific gitignored files that are checked in
+kits/flutter_ume_kit_ui/lib/third_party/cyclop/docs/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+kits/flutter_ume_kit_ui/lib/third_party/cyclop/docs/assets/packages/cyclop/assets/grid.png
+kits/flutter_ume_kit_ui/lib/third_party/cyclop/docs/assets/packages/paco/assets/grid.png
+
 # Exclude coverage files
 coverage/
 **/coverage/

@@ -1,42 +1,47 @@
 part of '../flutter_ume_plus.dart';
 
 class PluginStoreManager {
-  final String _pluginStoreKey = 'PluginStoreKey';
-  final String _minimalToolbarSwitch = 'MinimalToolbarSwitch';
-  final String _floatingDotPos = 'FloatingDotPos';
+  static final PluginStoreManager _instance = PluginStoreManager._();
+  factory PluginStoreManager() => _instance;
+  PluginStoreManager._();
 
-  final Future<SharedPreferences> _sharedPref = SharedPreferences.getInstance();
+  static const _kPlugins = 'PluginStoreKey';
+  static const _kMinimalToolbar = 'MinimalToolbarSwitch';
+  static const _kFloatingPos = 'FloatingDotPos';
 
-  Future<List<String>?> fetchStorePlugins() async {
-    final SharedPreferences prefs = await _sharedPref;
-    return prefs.getStringList(_pluginStoreKey);
+  SharedPreferences? _prefs;
+  Timer? _posDebounceTimer;
+
+  Future<SharedPreferences> get _sp async {
+    return _prefs ??= await SharedPreferences.getInstance();
   }
 
-  void storePlugins(List<String> plugins) async {
-    if (plugins.isEmpty) {
-      return;
-    }
-    final SharedPreferences prefs = await _sharedPref;
-    await prefs.setStringList(_pluginStoreKey, plugins);
+  Future<List<String>?> fetchStorePlugins() async {
+    return (await _sp).getStringList(_kPlugins);
+  }
+
+  Future<void> storePlugins(List<String> plugins) async {
+    if (plugins.isEmpty) return;
+    await (await _sp).setStringList(_kPlugins, plugins);
   }
 
   Future<bool?> fetchMinimalToolbarSwitch() async {
-    final SharedPreferences prefs = await _sharedPref;
-    return prefs.getBool(_minimalToolbarSwitch);
+    return (await _sp).getBool(_kMinimalToolbar);
   }
 
-  void storeMinimalToolbarSwitch(bool value) async {
-    final SharedPreferences prefs = await _sharedPref;
-    await prefs.setBool(_minimalToolbarSwitch, value);
+  Future<void> storeMinimalToolbarSwitch(bool value) async {
+    await (await _sp).setBool(_kMinimalToolbar, value);
   }
 
   Future<String?> fetchFloatingDotPos() async {
-    final SharedPreferences prefs = await _sharedPref;
-    return prefs.getString(_floatingDotPos);
+    return (await _sp).getString(_kFloatingPos);
   }
 
-  void storeFloatingDotPos(double x, double y) async {
-    final SharedPreferences prefs = await _sharedPref;
-    prefs.setString(_floatingDotPos, "$x,$y");
+  /// 防抖存储位置，避免拖拽时频繁写入
+  void storeFloatingDotPos(double x, double y) {
+    _posDebounceTimer?.cancel();
+    _posDebounceTimer = Timer(const Duration(milliseconds: 300), () async {
+      await (await _sp).setString(_kFloatingPos, '$x,$y');
+    });
   }
 }
