@@ -17,6 +17,7 @@ class UMEWidget extends StatefulWidget {
     this.supportedLocales,
     this.localizationsDelegates = defaultLocalizationsDelegates,
     this.floatingButtonSize = const Size(65.0, 65.0),
+    this.logoSize = 40.0,
   });
 
   final Widget child;
@@ -24,6 +25,7 @@ class UMEWidget extends StatefulWidget {
   final Iterable<Locale>? supportedLocales;
   final Iterable<LocalizationsDelegate> localizationsDelegates;
   final Size floatingButtonSize;
+  final double logoSize;
 
   /// Close the activated plugin if any.
   ///
@@ -184,6 +186,7 @@ class _UMEWidgetState extends State<UMEWidget> {
             child: _ContentPage(
               key: _contentPageKey,
               floatingButtonSize: widget.floatingButtonSize,
+              logoSize: widget.logoSize,
               refreshChildLayout: () {
                 _replaceChild();
                 setState(() {});
@@ -203,10 +206,14 @@ class _UMEWidgetState extends State<UMEWidget> {
 
 class _ContentPage extends StatefulWidget {
   const _ContentPage(
-      {super.key, this.refreshChildLayout, required this.floatingButtonSize});
+      {super.key,
+      this.refreshChildLayout,
+      required this.floatingButtonSize,
+      required this.logoSize});
 
   final VoidCallback? refreshChildLayout;
   final Size floatingButtonSize;
+  final double logoSize;
 
   @override
   _ContentPageState createState() => _ContentPageState();
@@ -327,13 +334,14 @@ class _ContentPageState extends State<_ContentPage> {
     if (_currentSelected != null) {
       key = ValueKey('plugin_${_currentSelected!.name}');
       logo = SizedBox(
-        height: 30,
-        width: 30,
+        height: widget.logoSize,
+        width: widget.logoSize,
         child: Image(image: _currentSelected!.iconImageProvider),
       );
     } else {
       key = ValueKey('flutter_logo_${_showedMenu ? 'active' : 'inactive'}');
-      logo = FlutterLogo(size: 40, colors: _showedMenu ? Colors.red : null);
+      logo = FlutterLogo(
+          size: widget.logoSize, colors: _showedMenu ? Colors.red : null);
     }
 
     return AnimatedSwitcher(

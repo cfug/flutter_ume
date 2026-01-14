@@ -2,6 +2,11 @@
 
 [简体中文](./CHANGELOG_cn.md)
 
+# 5.2.0
+
+- Add customizable logo size with `logoSize` parameter
+- Fix plugin icon size to match logo size for consistency
+
 # 5.1.0
 
 - Add customizable floating button size with `floatingButtonSize` parameter

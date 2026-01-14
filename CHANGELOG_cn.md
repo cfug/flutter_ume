@@ -2,6 +2,11 @@
 
 [English](./CHANGELOG.md)
 
+## [5.2.0]
+
+* 新增可自定义 Logo 尺寸的 `logoSize` 参数
+* 修复插件图标尺寸，使其与 Logo 尺寸保持一致
+
 ## [5.1.0]
 
 * 新增可自定义浮动按钮大小的 `floatingButtonSize` 参数
