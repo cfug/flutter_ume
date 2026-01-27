@@ -1,6 +1,6 @@
 name: flutter_ume_kit_show_code_plus
 description: Show Code kit for flutter_ume.
-version: 5.0.0
+version: 5.2.0
 homepage: https://github.com/mdddj/flutter_ume
 repository: https://github.com/mdddj/flutter_ume
 
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_ume_plus: ^5.0.0
+  flutter_ume_plus: ^5.2.0
   share_plus: ^12.0.0
   vm_service: ^15.0.2
   string_scanner: ^1.4.1

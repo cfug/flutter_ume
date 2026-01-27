@@ -1,6 +1,6 @@
 name: flutter_ume_kit_device_plus
 description: Device info kit for flutter_ume.
-version: 5.0.0
+version: 5.2.0
 homepage: https://github.com/mdddj/flutter_ume
 repository: https://github.com/mdddj/flutter_ume
 
@@ -10,9 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_ume_plus: ^5.0.0
-  system_info2: ^4.0.0
-  device_info_plus: ^12.0.0
+  flutter_ume_plus: ^5.2.0
+  system_info2: ^4.1.0
+  device_info_plus: ^12.3.0
   platform: ^3.1.6
 
 dev_dependencies:
