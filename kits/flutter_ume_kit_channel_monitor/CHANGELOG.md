@@ -1,3 +1,7 @@
+# 5.2.0
+
+* 升级 flutter_ume_plus 到 5.2.0
+
 # 5.0.0
 
 * 升级 flutter_ume_plus 到 5.0.0
