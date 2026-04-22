@@ -1,6 +1,6 @@
 name: flutter_ume_kit_console_plus
 description: Show debugPrint kit for flutter_ume.
-version: 5.2.0
+version: 5.2.1
 homepage: https://github.com/mdddj/flutter_ume
 repository: https://github.com/mdddj/flutter_ume
 
@@ -11,12 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
   tuple: ^2.0.2
-  shared_preferences: ^2.5.4
+  shared_preferences: ^2.5.5
   flutter_ume_plus: ^5.2.0
-  share_plus: ^12.0.1
+  share_plus: ^13.1.0
   url_launcher: ^6.3.2
 
 dev_dependencies:
-  mockito: ^5.6.1
+  mockito: ^5.6.4
   flutter_lints: ^6.0.0
 

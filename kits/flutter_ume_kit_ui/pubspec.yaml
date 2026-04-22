@@ -1,6 +1,6 @@
 name: flutter_ume_kit_ui_plus
 description: UI Kits for flutter_ume_plus.
-version: 5.2.0
+version: 5.2.1
 homepage: https://github.com/mdddj/flutter_ume
 repository: https://github.com/mdddj/flutter_ume
 
@@ -12,11 +12,8 @@ dependencies:
     sdk: flutter
   flutter_ume_plus: ^5.2.0
   touch_indicator: ^2.0.0
-  image: ^4.5.4
-  quiver: ^3.2.2
-  basics: ^0.10.0
+  image: ^4.8.0
 
 dev_dependencies:
-  mockito: ^5.6.1
+  mockito: ^5.6.4
   flutter_lints: ^6.0.0
-

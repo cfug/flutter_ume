@@ -4,19 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:quiver/iterables.dart';
 
-import '../../utils.dart';
+import '../color_utils.dart';
 import 'eye_dropper_layer.dart';
 
-const _cellSize = 10;
-
+const _cellSize = 10.0;
 const _gridSize = 90.0;
+const _gridCells = 9;
 
 class EyeDropOverlay extends StatelessWidget {
   final Offset? cursorPosition;
   final bool touchable;
-
   final List<Color> colors;
 
   const EyeDropOverlay({
@@ -28,15 +26,16 @@ class EyeDropOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (cursorPosition == null) return const SizedBox.shrink();
+    if (cursorPosition == null) {
+      return const SizedBox.shrink();
+    }
 
-    final centerColor = colors.isEmpty ? Colors.black : colors.center;
+    final centerColor = colors.centerColor;
     final magnifierTop =
         cursorPosition!.dy - (_gridSize / 2) - (touchable ? _gridSize / 2 : 0);
 
     return Stack(
       children: [
-        // 全屏 Listener 拦截触摸事件并处理取色
         Positioned.fill(
           child: Listener(
             behavior: HitTestBehavior.opaque,
@@ -48,7 +47,6 @@ class EyeDropOverlay extends StatelessWidget {
             child: const SizedBox.expand(),
           ),
         ),
-        // 放大镜 + 信息提示
         Positioned(
           left: cursorPosition!.dx - (_gridSize / 2),
           top: magnifierTop,
@@ -86,10 +84,10 @@ class EyeDropOverlay extends StatelessWidget {
 
   Widget _buildInfoTip(Color centerColor) {
     final hexColor = centerColor.hexRGB.toUpperCase();
-    final r = (centerColor.r * 255).round();
-    final g = (centerColor.g * 255).round();
-    final b = (centerColor.b * 255).round();
-    final rgbStr = 'rgb($r, $g, $b)';
+    final red = (centerColor.r * 255).round();
+    final green = (centerColor.g * 255).round();
+    final blue = (centerColor.b * 255).round();
+    final rgb = 'rgb($red, $green, $blue)';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -101,7 +99,6 @@ class EyeDropOverlay extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 颜色预览 + HEX（可复制）
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -131,11 +128,10 @@ class EyeDropOverlay extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          // RGB（可复制）
           GestureDetector(
-            onTap: () => Clipboard.setData(ClipboardData(text: rgbStr)),
+            onTap: () => Clipboard.setData(ClipboardData(text: rgb)),
             child: Text(
-              rgbStr,
+              rgb,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
@@ -144,7 +140,6 @@ class EyeDropOverlay extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          // 坐标
           Text(
             'x: ${cursorPosition!.dx.toInt()}  y: ${cursorPosition!.dy.toInt()}',
             style: const TextStyle(
@@ -159,14 +154,12 @@ class EyeDropOverlay extends StatelessWidget {
   }
 }
 
-/// paint a hovered pixel/colors preview
 class _PixelGridPainter extends CustomPainter {
   final List<Color> colors;
 
-  static const gridSize = 9;
-  static const eyeRadius = 35.0;
+  static const _eyeRadius = 35.0;
 
-  final blackStroke = Paint()
+  static final Paint _blackStroke = Paint()
     ..color = Colors.black
     ..strokeWidth = 10
     ..style = PaintingStyle.stroke;
@@ -189,39 +182,28 @@ class _PixelGridPainter extends CustomPainter {
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke;
 
-    // fill pixels color square
-    for (final color in enumerate(colors)) {
-      final fill = Paint()..color = color.value;
+    for (var index = 0; index < colors.length; index++) {
       final rect = Rect.fromLTWH(
-        (color.index % gridSize).toDouble() * _cellSize,
-        ((color.index ~/ gridSize) % gridSize).toDouble() * _cellSize,
-        _cellSize.toDouble(),
-        _cellSize.toDouble(),
+        (index % _gridCells) * _cellSize,
+        ((index ~/ _gridCells) % _gridCells) * _cellSize,
+        _cellSize,
+        _cellSize,
       );
-      canvas.drawRect(rect, fill);
-    }
-
-    // draw pixels borders after fills
-    for (final color in enumerate(colors)) {
-      final rect = Rect.fromLTWH(
-        (color.index % gridSize).toDouble() * _cellSize,
-        ((color.index ~/ gridSize) % gridSize).toDouble() * _cellSize,
-        _cellSize.toDouble(),
-        _cellSize.toDouble(),
-      );
+      canvas.drawRect(rect, Paint()..color = colors[index]);
       canvas.drawRect(
-          rect, color.index == colors.length ~/ 2 ? selectedStroke : stroke);
+        rect,
+        index == colors.length ~/ 2 ? selectedStroke : stroke,
+      );
 
-      if (color.index == colors.length ~/ 2) {
+      if (index == colors.length ~/ 2) {
         canvas.drawRect(rect.deflate(1), blackLine);
       }
     }
 
-    // black contrast ring
     canvas.drawCircle(
-      const Offset((_gridSize) / 2, (_gridSize) / 2),
-      eyeRadius,
-      blackStroke,
+      const Offset(_gridSize / 2, _gridSize / 2),
+      _eyeRadius,
+      _blackStroke,
     );
   }
 

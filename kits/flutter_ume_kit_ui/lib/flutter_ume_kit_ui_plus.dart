@@ -12,7 +12,10 @@ import 'package:flutter_ume_plus/flutter_ume_plus.dart';
 import 'package:image/image.dart' as img;
 import 'package:touch_indicator/touch_indicator.dart' as ti;
 
-import 'third_party/cyclop/lib/cyclop.dart';
+import 'src/color_tools/color_utils.dart';
+import 'src/color_tools/eyedrop/eye_dropper_layer.dart';
+import 'src/color_tools/eyedrop/eyedropper_button.dart'
+    if (dart.library.html) 'src/color_tools/eyedrop/eyedropper_button_web.dart';
 
 part 'components/align_ruler/align_ruler.dart';
 part 'components/align_ruler/icon.dart';

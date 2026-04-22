@@ -1,22 +1,17 @@
-import 'package:basics/int_basics.dart';
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
 import 'package:flutter/material.dart';
 
 import 'eye_dropper_layer.dart';
 
-/// an eyeDropper standalone button
-/// should be used with a context [EyeDrop] available
 class EyedropperButton extends StatelessWidget {
-  /// customisable icon ( default : [Icons.colorize] )
   final IconData icon;
-
-  /// icon color, default : [Colors.blueGrey]
   final Color iconColor;
-
-  /// color selection callback
   final ValueChanged<Color> onColor;
-
-  /// hover, and the color changed callback
   final ValueChanged<Color>? onColorChanged;
+
+  bool get eyedropEnabled => globalContext.has('flutterCanvasKit');
 
   const EyedropperButton({
     required this.onColor,
@@ -31,21 +26,10 @@ class EyedropperButton extends StatelessWidget {
         decoration:
             const BoxDecoration(color: Colors.white24, shape: BoxShape.circle),
         child: IconButton(
-          icon: const Icon(Icons.colorize),
+          icon: Icon(icon),
           color: iconColor,
           onPressed:
-              // cf. https://github.com/flutter/flutter/issues/22308
-              () {
-            final ctx = context;
-            Future.delayed(
-              50.milliseconds,
-              () {
-                if (ctx.mounted) {
-                  _onEyeDropperRequest(ctx);
-                }
-              },
-            );
-          },
+              eyedropEnabled ? () => _onEyeDropperRequest(context) : null,
         ),
       );
 
@@ -53,7 +37,7 @@ class EyedropperButton extends StatelessWidget {
     try {
       EyeDrop.of(context).capture(context, onColor, onColorChanged);
     } catch (err) {
-      throw Exception('EyeDrop capture error : $err');
+      throw Exception('EyeDrop capture error: $err');
     }
   }
 }

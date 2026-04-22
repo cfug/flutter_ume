@@ -41,7 +41,7 @@ class _ColorPickerState extends State<ColorPicker> {
 
   void _onColorChanged(Color color) {
     // 取色过程中更新颜色和面板位置
-    final cursorY = EyeDrop.data.cursorPosition.dy;
+    final cursorY = EyeDrop.cursorPosition.dy;
     final screenHeight = MediaQuery.sizeOf(context).height;
     final shouldBeAtBottom = cursorY < screenHeight * 0.5;
 

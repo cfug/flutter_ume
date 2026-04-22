@@ -2,6 +2,10 @@
 
 [简体中文](./CHANGELOG_cn.md)
 
+# 5.2.1
+
+- 依赖升级
+
 # 5.2.0
 
 - Add customizable logo size with `logoSize` parameter

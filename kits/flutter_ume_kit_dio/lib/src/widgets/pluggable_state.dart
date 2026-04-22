@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ume_plus/flutter_ume_plus.dart';
-import 'package:syntax_highlight/syntax_highlight.dart';
 
 import '../../flutter_ume_kit_dio_plus.dart';
 import '../constants/extensions.dart';
@@ -16,36 +15,26 @@ final _dioSettingCache = DioConfigUtil();
 
 /// JSON 高亮工具类
 class JsonHighlighter {
-  static Highlighter? _highlighter;
   static bool _initialized = false;
   static bool _initializing = false;
 
   static Future<void> initialize() async {
     if (_initialized || _initializing) return;
     _initializing = true;
-    try {
-      await Highlighter.initialize(['json']);
-      final theme = await HighlighterTheme.loadLightTheme();
-      _highlighter = Highlighter(language: 'json', theme: theme);
-      _initialized = true;
-      debugPrint("高亮初始化完成");
-    } catch (e) {
-      // 初始化失败时使用普通文本
-      debugPrint("代码高亮初始化失败:$e");
-    }
+    _initialized = true;
     _initializing = false;
   }
 
-  static TextSpan? highlight(String code) {
-    if (_highlighter == null) return null;
+  static TextSpan? highlightCodeWithJson(String code) {
     try {
-      return _highlighter!.highlight(code);
+      // todo! 没有找到好的 json 高亮插件
+      return null;
     } catch (_) {
       return null;
     }
   }
 
-  static bool get isReady => _initialized && _highlighter != null;
+  static bool get isReady => _initialized;
 }
 
 class DioPluggableState extends State<DioInspector> with StoreMixin {
@@ -826,6 +815,7 @@ class _DetailSectionState extends State<_DetailSection> {
 
   // 大数据阈值：超过此长度时截断显示
   static const int _truncateThreshold = 10000;
+
   // 预览长度
   static const int _previewLength = 2000;
 
@@ -858,9 +848,8 @@ class _DetailSectionState extends State<_DetailSection> {
 
   void _prepareContent() {
     final content = _displayContent;
-    // 只对小数据做高亮，大数据跳过高亮以提升性能
     if (widget.isJson && JsonHighlighter.isReady && content.length < 5000) {
-      _highlightedSpan = JsonHighlighter.highlight(content);
+      _highlightedSpan = JsonHighlighter.highlightCodeWithJson(content);
     } else {
       _highlightedSpan = null;
     }
